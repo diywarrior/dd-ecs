@@ -1,7 +1,7 @@
 # dd-ecs
 
 
-##Prerequisities
+## Prerequisities
 
  - configured awscli
  - terraform >= 1.1
@@ -9,7 +9,7 @@
  - docker
 
 
-##Set-up
+## Set-up
 1. Rename locals_example.tf to locals.tf
 2. Update locals with your settings
    1. CPU and Memory should be set according to :
