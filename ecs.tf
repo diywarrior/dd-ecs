@@ -2,6 +2,8 @@ resource "aws_ecs_cluster" "dd" {
   name = "dd"
 }
 
+data "aws_region" "current" {}
+
 resource "aws_ecs_task_definition" "dd" {
   family = "dd"
   container_definitions = jsonencode([
@@ -11,6 +13,15 @@ resource "aws_ecs_task_definition" "dd" {
       cpu = local.cpu
       memory = local.memory
       essential = true
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group = aws_cloudwatch_log_group.dd.name
+          awslogs-region = data.aws_region.current.name
+          awslogs-stream-prefix = aws_cloudwatch_log_group.dd.name
+        }
+        secretOptions = []
+      }
     }
   ])
   requires_compatibilities = [
@@ -19,7 +30,10 @@ resource "aws_ecs_task_definition" "dd" {
   memory = local.memory
   network_mode = "awsvpc"
   task_role_arn = aws_iam_role.dd.arn
-  execution_role_arn = aws_iam_role.dd.arn
+  execution_role_arn = aws_iam_role.dd_execute.arn
+#  lifecycle {
+#    ignore_changes = [ container_definitions ]
+#  }
 }
 
 resource "aws_ecs_service" "dd" {
@@ -45,4 +59,16 @@ resource "aws_ecs_service" "dd" {
   force_new_deployment = true
   deployment_maximum_percent = 100
   deployment_minimum_healthy_percent = 0
+#  lifecycle {
+#    ignore_changes        = [
+#      task_definition
+#    ]
+#  }
+}
+
+
+
+resource "aws_cloudwatch_log_group" "dd" {
+  name              = "dd"
+  retention_in_days = 1
 }

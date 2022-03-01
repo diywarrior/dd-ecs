@@ -7,7 +7,7 @@ data "aws_iam_policy_document" "ecr" {
       type = "AWS"
 
       identifiers = [
-        "arn:aws:iam::${local.aws_id}:root",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
       ]
     }
 
@@ -44,3 +44,16 @@ data "aws_iam_policy_document" "assume_role_policy" {
     }
   }
 }
+
+resource "aws_iam_role" "dd_execute" {
+  name               = "dd-execute"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "dd_execute" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  role       = aws_iam_role.dd_execute.name
+}
+
+
+data "aws_caller_identity" "current" {}
