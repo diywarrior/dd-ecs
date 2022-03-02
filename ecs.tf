@@ -13,15 +13,15 @@ resource "aws_ecs_task_definition" "dd" {
       cpu = local.cpu
       memory = local.memory
       essential = true
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group = aws_cloudwatch_log_group.dd.name
-          awslogs-region = data.aws_region.current.name
-          awslogs-stream-prefix = aws_cloudwatch_log_group.dd.name
-        }
-        secretOptions = []
-      }
+#      logConfiguration = {
+#        logDriver = "awslogs"
+#        options = {
+#          awslogs-group = aws_cloudwatch_log_group.dd.name
+#          awslogs-region = data.aws_region.current.name
+#          awslogs-stream-prefix = aws_cloudwatch_log_group.dd.name
+#        }
+#        secretOptions = []
+#      }
     }
   ])
   requires_compatibilities = [
@@ -67,8 +67,8 @@ resource "aws_ecs_service" "dd" {
 }
 
 
-
-resource "aws_cloudwatch_log_group" "dd" {
-  name              = "dd"
-  retention_in_days = 1
-}
+#
+#resource "aws_cloudwatch_log_group" "dd" {
+#  name              = "dd"
+#  retention_in_days = 1
+#}
